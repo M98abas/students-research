@@ -1,7 +1,7 @@
 import notFound from "../middleware/notFound";
 import mainV1 from "../routes/main";
 import cors from "cors";
-const express = require("express");
+import express from "express";
 const app = express();
 
 app.use(cors());
