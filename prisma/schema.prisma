@@ -1,0 +1,75 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+
+model Admin{
+  id Int @id @default(autoincrement())
+  email String @unique
+  nickname String @unique
+  password String
+  active Boolean @default(true)
+}
+
+model Customers{
+  id Int @id @default(autoincrement())
+  email String @unique
+  fullname String
+  city String
+  address String
+  phone String
+  active Boolean @default(true)
+  password String
+  orders Orders[]
+}
+model Orders{
+  id Int @id @default(autoincrement())
+  amount Int
+  total_cost Int
+  order_date DateTime @default(now())
+  order_status String @default("new")
+  created_at DateTime @default(now())
+  customer Customers @relation(fields:[customer_id], references:[id])
+  customer_id Int // this will made the relationship between the models 
+  orders Order_datels[]
+  active Boolean @default(true) 
+}
+model Order_datels{
+  id Int @id @default(autoincrement())
+  orders Orders @relation(fields:[order_id], references:[id])
+  order_id Int
+  product Products @relation(fields:[product_id], references:[id])
+  product_id Int
+  total_cost Int?
+  quantity Int?
+  discount Int? @default(0)
+}
+model Products{
+  id Int @id @default(autoincrement())
+  name String
+  price Int
+  description String
+  image String
+  category Categories @relation(fields:[category_id], references:[id])
+  category_id Int
+  orders Order_datels[]
+  created_at DateTime @default(now())
+  stock Int
+  active Boolean @default(true) 
+}
+model Categories{
+  id Int @id @default(autoincrement())
+  name String
+  description String
+  image String @default("")
+  active Boolean @default(true) 
+  products Products[]
+}
